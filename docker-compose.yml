@@ -4,6 +4,8 @@ services:
   elitedash:
     image: elitedash-elite:latest
     build: .
+    environment:
+      - UPDATE_HASH=elite_7_mobile_v1
     networks:
       - typebotnet
     deploy:
