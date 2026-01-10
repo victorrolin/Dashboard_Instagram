@@ -1,11 +1,22 @@
-version: '3'
+version: '3.3'
 
 services:
   elitedash:
     build: .
     image: elitedash-elite:latest
-    restart: always
-    ports:
-      - "1234:80"
-    environment:
-      - NODE_ENV=production
+    networks:
+      - traefik-public
+    deploy:
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.elitedash.rule=Host(`dashinstagram.automatech.tech`)"
+        - "traefik.http.routers.elitedash.entrypoints=websecure"
+        - "traefik.http.routers.elitedash.tls.certresolver=myresolver"
+        - "traefik.http.services.elitedash.loadbalancer.server.port=80"
+
+networks:
+  traefik-public:
+    external: true
