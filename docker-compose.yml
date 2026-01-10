@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  elitedash:
+    build: .
+    container_name: elitedash
+    restart: always
+    ports:
+      - "1234:80"
+    environment:
+      - NODE_ENV=production
