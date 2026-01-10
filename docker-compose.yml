@@ -20,7 +20,7 @@ services:
         - io.portainer.accesscontrol.users=admin
         - traefik.enable=true
         - traefik.http.routers.elitedash.rule=Host(`dashinstagram.automatech.tech`)
-        - traefik.http.routers.elitedash.entrypoints=websecure
+        - traefik.http.routers.elitedash.entrypoints=web,websecure
         - traefik.http.routers.elitedash.tls.certresolver=letsencryptresolver
         - traefik.http.services.elitedash.loadbalancer.server.port=80
         - traefik.http.services.elitedash.loadbalancer.passHostHeader=true
