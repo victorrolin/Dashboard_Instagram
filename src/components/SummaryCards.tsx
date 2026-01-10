@@ -65,7 +65,7 @@ export function SummaryCards({ leads, lang }: Props) {
     ];
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
             {stats.map((stat, index) => (
                 <motion.div
                     key={stat.label}
@@ -73,20 +73,20 @@ export function SummaryCards({ leads, lang }: Props) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                     className="elite-card"
-                    style={{ padding: '1.75rem' }}
+                    style={{ padding: '1.5rem' }}
                 >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                         <div style={{
                             background: `${stat.color}15`,
-                            padding: '0.75rem',
-                            borderRadius: '12px',
+                            padding: '0.6rem',
+                            borderRadius: '10px',
                             border: `1px solid ${stat.color}20`
                         }}>
-                            <stat.icon size={22} color={stat.color} />
+                            <stat.icon size={20} color={stat.color} />
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500, marginBottom: '0.25rem' }}>{stat.label}</p>
-                            <h2 style={{ fontSize: '1.75rem', margin: 0 }}>{stat.value}</h2>
+                            <p className="metric-label" style={{ marginBottom: '0.15rem' }}>{stat.label}</p>
+                            <h2 className="metric-value" style={{ fontSize: '1.5rem', margin: 0 }}>{stat.value}</h2>
                         </div>
                     </div>
 
@@ -94,17 +94,17 @@ export function SummaryCards({ leads, lang }: Props) {
                         <div>
                             <span style={{
                                 color: stat.color,
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
+                                fontSize: '0.7rem',
+                                fontWeight: 800,
                                 background: `${stat.color}10`,
-                                padding: '0.2rem 0.5rem',
+                                padding: '0.15rem 0.4rem',
                                 borderRadius: '6px'
                             }}>
                                 {stat.trend}
                             </span>
                         </div>
 
-                        <div style={{ width: '80px', height: '30px' }}>
+                        <div style={{ width: '70px', height: '25px' }}>
                             <svg width="100%" height="100%" viewBox="0 0 100 40">
                                 <defs>
                                     <linearGradient id={`grad-${index}`} x1="0%" y1="0%" x2="0%" y2="100%">
@@ -116,7 +116,7 @@ export function SummaryCards({ leads, lang }: Props) {
                                     d={`M ${stat.sparkData.map((d, i) => `${(i * 100) / (stat.sparkData.length - 1)} ${40 - (d / 2)}`).join(' L ')}`}
                                     fill="none"
                                     stroke={stat.color}
-                                    strokeWidth="2"
+                                    strokeWidth="2.5"
                                     strokeLinecap="round"
                                 />
                                 <path

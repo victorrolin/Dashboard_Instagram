@@ -12,7 +12,9 @@ import {
   PieChart,
   LogOut,
   Zap,
-  Globe
+  Globe,
+  Menu,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,10 +25,10 @@ const translations = {
     analytics: 'Análise',
     syncStatus: 'SINCRONIZAÇÃO AO VIVO',
     polling: 'AUTO-POLLING ATIVO',
-    syncNow: 'Sincronizar Agora',
-    overview: 'Visão Geral',
-    realtimeData: 'Dados coletados em tempo real.',
-    lastSync: 'Última sinc.',
+    syncNow: 'Sincronizar',
+    overview: 'Geral',
+    realtimeData: 'Dados em tempo real.',
+    lastSync: 'Sinc.',
     insightsTitle: 'Insights de Elite',
     insightsDesc: 'A inteligência detectou potencial de fechamento em 3 novos leads.',
     seeSuggestions: 'Ver Sugestões',
@@ -34,7 +36,7 @@ const translations = {
     reportsDesc: 'Em breve: Projeção de ROI e heatmap de conversão por canal.',
     upgradeBtn: 'Upgrade para Enterprise',
     logout: 'Sair',
-    comingSoon: 'Recurso em desenvolvimento',
+    comingSoon: 'Em breve',
     language: 'Linguagem'
   },
   en: {
@@ -43,10 +45,10 @@ const translations = {
     analytics: 'Analytics',
     syncStatus: 'LIVE SYNC',
     polling: 'AUTO-POLLING ACTIVE',
-    syncNow: 'Sync Now',
+    syncNow: 'Sync',
     overview: 'Overview',
     realtimeData: 'Real-time data synchronization.',
-    lastSync: 'Last sync',
+    lastSync: 'Sync',
     insightsTitle: 'Elite Insights',
     insightsDesc: 'Intelligence detected closing potential in 3 new leads.',
     seeSuggestions: 'See Suggestions',
@@ -54,7 +56,7 @@ const translations = {
     reportsDesc: 'Coming soon: ROI projection and channel conversion heatmap.',
     upgradeBtn: 'Upgrade to Enterprise',
     logout: 'Logout',
-    comingSoon: 'Feature under development',
+    comingSoon: 'Coming soon',
     language: 'Language'
   }
 };
@@ -67,6 +69,7 @@ function App() {
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [lang, setLang] = useState<'pt' | 'en'>('pt');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const t = translations[lang];
 
@@ -120,6 +123,11 @@ function App() {
     { id: 'analytics', icon: PieChart, label: t.analytics },
   ];
 
+  const handleTabChange = (id: string) => {
+    setActiveTab(id);
+    setMobileMenuOpen(false);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
@@ -132,19 +140,19 @@ function App() {
             transition={{ duration: 0.2 }}
           >
             <SummaryCards leads={leads} lang={lang} />
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2.5rem', marginTop: '3rem' }}>
+            <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2rem', marginTop: '2.5rem' }}>
               <LeadTable leads={leads} loading={loading} lang={lang} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 <StatusChart leads={leads} lang={lang} />
-                <div className="elite-card" style={{ padding: '2.5rem' }}>
-                  <div style={{ width: 50, height: 50, background: 'rgba(59, 130, 246, 0.1)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                    <Zap size={24} color="var(--accent-primary)" />
+                <div className="elite-card" style={{ padding: '2rem' }}>
+                  <div style={{ width: 44, height: 44, background: 'rgba(59, 130, 246, 0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <Zap size={22} color="var(--accent-primary)" />
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{t.insightsTitle}</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                  <h3 style={{ fontSize: '1.15rem', marginBottom: '0.5rem' }}>{t.insightsTitle}</h3>
+                  <p className="secondary-label" style={{ lineHeight: 1.6 }}>
                     {t.insightsDesc}
                   </p>
-                  <button className="primary-button" style={{ width: '100%', marginTop: '1.5rem' }}>{t.seeSuggestions}</button>
+                  <button className="primary-button" style={{ width: '100%', marginTop: '1.5rem', padding: '0.65rem' }}>{t.seeSuggestions}</button>
                 </div>
               </div>
             </div>
@@ -170,18 +178,19 @@ function App() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}
+            className="dashboard-grid"
+            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}
           >
             <StatusChart leads={leads} lang={lang} />
-            <div className="elite-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-              <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%' }}>
-                <PieChart size={64} color="var(--accent-primary)" />
+            <div className="elite-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+              <div style={{ marginBottom: '1.5rem', padding: '1.25rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%' }}>
+                <PieChart size={48} color="var(--accent-primary)" />
               </div>
-              <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem' }}>{t.reports}</h2>
-              <p style={{ color: 'var(--text-secondary)', maxWidth: '400px', lineHeight: 1.6 }}>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{t.reports}</h2>
+              <p className="secondary-label" style={{ maxWidth: '350px', lineHeight: 1.5 }}>
                 {t.reportsDesc}
               </p>
-              <button className="primary-button" style={{ marginTop: '2rem', padding: '0.75rem 2.5rem' }}>{t.upgradeBtn}</button>
+              <button className="primary-button" style={{ marginTop: '1.5rem', padding: '0.7rem 2rem' }}>{t.upgradeBtn}</button>
             </div>
           </motion.div>
         );
@@ -195,120 +204,128 @@ function App() {
       <div className="mesh-bg" />
       <div className="noise-overlay" />
 
-      <aside className="sidebar">
+      <aside className={`sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '3rem', padding: '0 0.5rem' }}>
           <div style={{
             background: 'var(--accent-primary)',
-            width: 38,
-            height: 38,
+            width: 36,
+            height: 36,
             borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)'
+            boxShadow: '0 0 15px rgba(59, 130, 246, 0.4)'
           }}>
-            <BarChart3 size={20} color="white" />
+            <BarChart3 size={18} color="white" />
           </div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Elite<span style={{ color: 'var(--accent-primary)' }}>Dash</span></h2>
+          <h2 className="sidebar-title" style={{ fontSize: '1.15rem', fontWeight: 800 }}>Elite<span style={{ color: 'var(--accent-primary)' }}>Dash</span></h2>
+          <button className="mobile-only" onClick={() => setMobileMenuOpen(false)} style={{ marginLeft: 'auto', background: 'transparent', border: 'none', color: 'white' }}>
+            <X size={20} />
+          </button>
         </div>
 
         <nav style={{ flex: 1 }}>
           {menuItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleTabChange(item.id)}
               style={{
                 width: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1rem',
-                padding: '0.85rem 1rem',
+                padding: '0.75rem 1rem',
                 background: activeTab === item.id ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
                 border: 'none',
                 borderRadius: '12px',
                 color: activeTab === item.id ? 'white' : 'var(--text-secondary)',
                 cursor: 'pointer',
-                marginBottom: '0.5rem',
+                marginBottom: '0.4rem',
                 transition: 'all 0.2s',
                 fontWeight: activeTab === item.id ? 600 : 400,
               }}
             >
-              <item.icon size={20} color={activeTab === item.id ? 'var(--accent-primary)' : 'currentColor'} />
-              {item.label}
+              <item.icon size={18} color={activeTab === item.id ? 'var(--accent-primary)' : 'currentColor'} />
+              <span>{item.label}</span>
             </button>
           ))}
         </nav>
 
-        <div style={{ paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
+        <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
           <button style={{
             width: '100%',
             display: 'flex',
             alignItems: 'center',
             gap: '1rem',
-            padding: '0.85rem 1rem',
+            padding: '0.75rem 1rem',
             background: 'transparent',
             border: 'none',
             color: 'var(--text-secondary)',
             cursor: 'pointer',
           }}>
-            <LogOut size={20} />
-            {t.logout}
+            <LogOut size={18} />
+            <span>{t.logout}</span>
           </button>
         </div>
       </aside>
 
       <main className="main-content">
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-          <div>
-            <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }} className="text-gradient">
-              {menuItems.find(i => i.id === activeTab)?.label} <span style={{ opacity: 0.5 }}>/ {t.overview}</span>
-            </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{t.realtimeData}</p>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <button className="mobile-only glass-button" onClick={() => setMobileMenuOpen(true)} style={{ padding: '0.5rem' }}>
+              <Menu size={20} />
+            </button>
+            <div>
+              <h1 className="metric-value text-gradient" style={{ fontSize: '1.75rem', marginBottom: '0.25rem' }}>
+                {menuItems.find(i => i.id === activeTab)?.label} <span className="secondary-label" style={{ opacity: 0.5 }}>/ {t.overview}</span>
+              </h1>
+              <p className="secondary-label">{t.realtimeData}</p>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <button
               onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
               className="glass-button"
-              style={{ padding: '0.5rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem' }}
+              style={{ padding: '0.5rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.7rem' }}
             >
-              <Globe size={16} color="var(--accent-primary)" />
+              <Globe size={14} color="var(--accent-primary)" />
               {lang.toUpperCase()}
             </button>
 
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.6rem',
+              gap: '0.5rem',
               background: 'var(--glass-bg)',
-              padding: '0.5rem 1rem',
-              borderRadius: '0.75rem',
+              padding: '0.4rem 0.75rem',
+              borderRadius: '0.6rem',
               border: '1px solid var(--glass-border)'
             }}>
               <div style={{
-                width: 7,
-                height: 7,
+                width: 6,
+                height: 6,
                 background: realtimeStatus === 'CONNECTED' ? 'var(--accent-secondary)' : '#f59e0b',
                 borderRadius: '50%',
                 boxShadow: `0 0 10px ${realtimeStatus === 'CONNECTED' ? 'var(--accent-secondary)' : '#f59e0b'}`
               }} />
-              <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>
                 {realtimeStatus === 'CONNECTED' ? t.syncStatus : t.polling}
               </span>
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.02, background: 'rgba(255,255,255,0.05)' }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => fetchLeads()}
               disabled={refreshing}
               className="glass-button"
-              style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}
+              style={{ padding: '0.4rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}
             >
-              <RefreshCw size={16} color="var(--accent-primary)" style={{ animation: refreshing ? 'spin 2s linear infinite' : 'none' }} />
+              <RefreshCw size={14} color="var(--accent-primary)" style={{ animation: refreshing ? 'spin 2s linear infinite' : 'none' }} />
               <div style={{ textAlign: 'left' }}>
-                <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600 }}>{t.syncNow}</p>
-                <p style={{ margin: 0, fontSize: '0.6rem', opacity: 0.5 }}>{t.lastSync}: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700 }}>{t.syncNow}</p>
+                <p style={{ margin: 0, fontSize: '0.55rem', opacity: 0.5 }}>{t.lastSync}: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
               </div>
             </motion.button>
           </div>

@@ -18,45 +18,45 @@ interface Props {
 const translations = {
     pt: {
         title: 'Estação de Leads',
-        desc: 'Gerencie sua base de base de leads ativos.',
-        searchPlaceholder: 'Buscar por nome, id, email...',
-        allStatus: 'Todos Status',
+        desc: 'Gestão de leads ativos.',
+        searchPlaceholder: 'Buscar...',
+        allStatus: 'Filtros',
         hot: '🔥 Quente',
         warm: '⚡ Morno',
         cold: '❄️ Frio',
-        colId: 'Identificação',
+        colId: 'ID',
         colContact: 'Contato',
-        colMsg: 'Última Mensagem',
-        colScore: 'Lead Score',
+        colMsg: 'Mensagem',
+        colScore: 'Score',
         colStatus: 'Status',
-        noLeads: 'Nenhum lead encontrado.',
-        now: 'Agora mesmo',
-        agoMin: 'm atrás',
-        agoHour: 'h atrás',
-        noRecord: 'Sem registro',
-        notInformed: 'Não informado',
-        noMsg: 'Sem mensagem'
+        noLeads: 'Nenhum lead.',
+        now: 'Agora',
+        agoMin: 'm',
+        agoHour: 'h',
+        noRecord: '-',
+        notInformed: 'N/A',
+        noMsg: '...'
     },
     en: {
         title: 'Lead Station',
-        desc: 'Manage your active lead database.',
-        searchPlaceholder: 'Search by name, id, email...',
-        allStatus: 'All Status',
+        desc: 'Active lead management.',
+        searchPlaceholder: 'Search...',
+        allStatus: 'Filters',
         hot: '🔥 Hot',
         warm: '⚡ Warm',
         cold: '❄️ Cold',
-        colId: 'Identification',
+        colId: 'ID',
         colContact: 'Contact',
-        colMsg: 'Last Message',
-        colScore: 'Lead Score',
+        colMsg: 'Message',
+        colScore: 'Score',
         colStatus: 'Status',
-        noLeads: 'No leads found.',
-        now: 'Just now',
-        agoMin: 'm ago',
-        agoHour: 'h ago',
-        noRecord: 'No record',
-        notInformed: 'Not informed',
-        noMsg: 'No message'
+        noLeads: 'No leads.',
+        now: 'Now',
+        agoMin: 'm',
+        agoHour: 'h',
+        noRecord: '-',
+        notInformed: 'N/A',
+        noMsg: '...'
     }
 };
 
@@ -101,7 +101,7 @@ export function LeadTable({ leads, loading, lang }: Props) {
         if (diffInMins < 1) return t.now;
         if (diffInMins < 60) return `${diffInMins}${t.agoMin}`;
         if (diffInHours < 24) return `${diffInHours}${t.agoHour}`;
-        return past.toLocaleDateString();
+        return past.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' });
     };
 
     return (
@@ -111,15 +111,15 @@ export function LeadTable({ leads, loading, lang }: Props) {
             className="elite-card"
             style={{ padding: '0' }}
         >
-            <div style={{ padding: '2rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{t.title}</h3>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{t.desc}</p>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.15rem' }}>{t.title}</h3>
+                    <p className="secondary-label" style={{ fontSize: '0.75rem' }}>{t.desc}</p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ position: 'relative' }}>
-                        <Search style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={16} />
+                <div style={{ display: 'flex', gap: '0.75rem', flex: '1', minWidth: '250px', justifyContent: 'flex-end' }}>
+                    <div style={{ position: 'relative', flex: '1', maxWidth: '200px' }}>
+                        <Search style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={14} />
                         <input
                             type="text"
                             placeholder={t.searchPlaceholder}
@@ -128,11 +128,11 @@ export function LeadTable({ leads, loading, lang }: Props) {
                             style={{
                                 background: 'rgba(255,255,255,0.03)',
                                 border: '1px solid var(--glass-border)',
-                                borderRadius: '10px',
-                                padding: '0.65rem 1rem 0.65rem 2.5rem',
+                                borderRadius: '8px',
+                                padding: '0.5rem 0.75rem 0.5rem 2.2rem',
                                 color: 'white',
-                                fontSize: '0.85rem',
-                                width: '280px',
+                                fontSize: '0.8rem',
+                                width: '100%',
                                 outline: 'none',
                             }}
                         />
@@ -144,10 +144,10 @@ export function LeadTable({ leads, loading, lang }: Props) {
                         style={{
                             background: 'rgba(255,255,255,0.03)',
                             border: '1px solid var(--glass-border)',
-                            borderRadius: '10px',
-                            padding: '0.65rem 1rem',
+                            borderRadius: '8px',
+                            padding: '0.5rem 0.75rem',
                             color: 'white',
-                            fontSize: '0.85rem',
+                            fontSize: '0.8rem',
                             outline: 'none',
                             cursor: 'pointer'
                         }}
@@ -164,23 +164,23 @@ export function LeadTable({ leads, loading, lang }: Props) {
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(255,255,255,0.01)' }}>
-                            <th style={{ textAlign: 'left', padding: '1rem 2rem', fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.colId}</th>
-                            <th style={{ textAlign: 'left', padding: '1rem 2rem', fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.colContact}</th>
-                            <th style={{ textAlign: 'left', padding: '1rem 2rem', fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.colMsg}</th>
-                            <th style={{ textAlign: 'left', padding: '1rem 2rem', fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.colScore}</th>
-                            <th style={{ textAlign: 'left', padding: '1rem 2rem', fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.colStatus}</th>
+                            <th className="metric-label" style={{ textAlign: 'left', padding: '0.75rem 1.5rem' }}>{t.colId}</th>
+                            <th className="metric-label" style={{ textAlign: 'left', padding: '0.75rem 1.5rem' }}>{t.colContact}</th>
+                            <th className="metric-label mobile-hide" style={{ textAlign: 'left', padding: '0.75rem 1.5rem' }}>{t.colMsg}</th>
+                            <th className="metric-label" style={{ textAlign: 'left', padding: '0.75rem 1.5rem' }}>{t.colScore}</th>
+                            <th className="metric-label" style={{ textAlign: 'left', padding: '0.75rem 1.5rem' }}>{t.colStatus}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={5} style={{ padding: '4rem', textAlign: 'center' }}>
-                                    <RefreshCw className="spinning" size={32} color="var(--accent-primary)" />
+                                <td colSpan={5} style={{ padding: '3rem', textAlign: 'center' }}>
+                                    <RefreshCw className="spinning" size={24} color="var(--accent-primary)" />
                                 </td>
                             </tr>
                         ) : filteredLeads.length === 0 ? (
                             <tr>
-                                <td colSpan={5} style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                                <td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                                     {t.noLeads}
                                 </td>
                             </tr>
@@ -192,58 +192,58 @@ export function LeadTable({ leads, loading, lang }: Props) {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        style={{ borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}
+                                        style={{ borderBottom: '1px solid var(--border-color)' }}
                                     >
-                                        <td style={{ padding: '1.25rem 2rem' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <td style={{ padding: '1rem 1.5rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                                 {lead.avatar_url ? (
-                                                    <img src={lead.avatar_url} alt={lead.full_name} style={{ width: 38, height: 38, borderRadius: '12px', objectFit: 'cover' }} />
+                                                    <img src={lead.avatar_url} alt={lead.full_name} style={{ width: 34, height: 34, borderRadius: '10px', objectFit: 'cover' }} />
                                                 ) : (
                                                     <div style={{
-                                                        width: 38,
-                                                        height: 38,
-                                                        borderRadius: '12px',
+                                                        width: 34,
+                                                        height: 34,
+                                                        borderRadius: '10px',
                                                         background: `${getAvatarColor(lead.sender_id || lead.id || '')}15`,
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
                                                         color: getAvatarColor(lead.sender_id || lead.id || ''),
-                                                        fontSize: '0.8rem',
+                                                        fontSize: '0.75rem',
                                                         fontWeight: 800,
                                                         border: `1px solid ${getAvatarColor(lead.sender_id || lead.id || '')}25`
                                                     }}>
-                                                        {(lead.full_name || lead.sender_id || lead.id || 'U').substring(0, 2).toUpperCase()}
+                                                        {(lead.full_name || lead.sender_id || lead.id || 'U').substring(0, 1).toUpperCase()}
                                                     </div>
                                                 )}
                                                 <div>
-                                                    <p style={{ fontSize: '0.9rem', fontWeight: 600, margin: 0 }}>{lead.full_name || `ID: ${lead.sender_id || lead.id?.substring(0, 8)}`}</p>
-                                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    <p style={{ fontSize: '0.85rem', fontWeight: 700, margin: 0 }}>{lead.full_name || `ID: ${lead.sender_id || lead.id?.substring(0, 6)}`}</p>
+                                                    <p className="secondary-label" style={{ fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '3px' }}>
                                                         <Clock size={10} />
                                                         {getTimeAgo(lead.last_interaction)}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style={{ padding: '1.25rem 2rem' }}>
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: lead.email ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '0.8rem' }}>
-                                                    <Mail size={12} />
+                                        <td style={{ padding: '1rem 1.5rem' }}>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: lead.email ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '0.75rem' }}>
+                                                    <Mail size={10} />
                                                     <span>{lead.email || t.notInformed}</span>
                                                 </div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: lead.phone ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '0.8rem' }}>
-                                                    <Phone size={12} />
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: lead.phone ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '0.75rem' }}>
+                                                    <Phone size={10} />
                                                     <span>{lead.phone || t.notInformed}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style={{ padding: '1.25rem 2rem' }}>
-                                            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0 }}>
+                                        <td className="mobile-hide" style={{ padding: '1rem 1.5rem' }}>
+                                            <p className="secondary-label" style={{ maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0, fontSize: '0.8rem' }}>
                                                 {lead.last_message || t.noMsg}
                                             </p>
                                         </td>
-                                        <td style={{ padding: '1.25rem 2rem' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                <div className="score-progress-container" style={{ width: '60px' }}>
+                                        <td style={{ padding: '1rem 1.5rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                <div className="score-progress-container" style={{ width: '50px', height: '5px' }}>
                                                     <div
                                                         className="score-progress-bar"
                                                         style={{
@@ -252,11 +252,11 @@ export function LeadTable({ leads, loading, lang }: Props) {
                                                         }}
                                                     />
                                                 </div>
-                                                <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{lead.lead_score}</span>
+                                                <span className="metric-value" style={{ fontSize: '0.85rem' }}>{lead.lead_score}</span>
                                             </div>
                                         </td>
-                                        <td style={{ padding: '1.25rem 2rem' }}>
-                                            <span className={`badge-elite badge-${lead.lead_status?.toLowerCase()}`}>
+                                        <td style={{ padding: '1rem 1.5rem' }}>
+                                            <span className={`badge-elite badge-${lead.lead_status?.toLowerCase()}`} style={{ padding: '0.25rem 0.6rem', fontSize: '0.65rem' }}>
                                                 {lead.lead_status}
                                             </span>
                                         </td>
