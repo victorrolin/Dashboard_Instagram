@@ -4,6 +4,7 @@ import type { Lead } from './lib/supabase.ts';
 import { SummaryCards } from './components/SummaryCards.tsx';
 import { StatusChart } from './components/StatusChart.tsx';
 import { LeadTable } from './components/LeadTable.tsx';
+import { Auth } from './components/Auth.tsx';
 import {
   BarChart3,
   RefreshCw,
@@ -62,6 +63,7 @@ const translations = {
 };
 
 function App() {
+  const [session, setSession] = useState<any>(null);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [realtimeStatus, setRealtimeStatus] = useState<'CONNECTING' | 'CONNECTED' | 'ERROR'>('CONNECTING');
@@ -74,6 +76,21 @@ function App() {
   const t = translations[lang];
 
   useEffect(() => {
+    // Auth Listener
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!session) return;
+
     fetchLeads();
 
     const pollInterval = setInterval(() => {
@@ -95,7 +112,7 @@ function App() {
       supabase.removeChannel(channel);
       clearInterval(pollInterval);
     };
-  }, []);
+  }, [session]);
 
   async function fetchLeads(isBackground = false) {
     if (!isBackground) setLoading(true);
@@ -117,6 +134,10 @@ function App() {
     }
   }
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   const menuItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: t.dashboard },
     { id: 'leads', icon: Users, label: t.station },
@@ -127,6 +148,10 @@ function App() {
     setActiveTab(id);
     setMobileMenuOpen(false);
   };
+
+  if (!session) {
+    return <Auth />;
+  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -252,17 +277,20 @@ function App() {
         </nav>
 
         <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
-          <button style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            padding: '0.75rem 1rem',
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-          }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              padding: '0.75rem 1rem',
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+            }}
+          >
             <LogOut size={18} />
             <span>{t.logout}</span>
           </button>
