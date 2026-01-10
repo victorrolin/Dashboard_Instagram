@@ -1,9 +1,9 @@
-version: '3.8'
+version: '3'
 
 services:
   elitedash:
     build: .
-    container_name: elitedash
+    image: elitedash-elite:latest
     restart: always
     ports:
       - "1234:80"
